@@ -1,0 +1,36 @@
+
+#Todo: fetch driver, cudnn, cuda versions from env vars via make directives
+
+
+BootStrap: docker
+From: golang:latest
+
+
+%runscript
+    # When executed, the container will run this
+    # chaining spark to slurm allocation
+    # Note: no binding to cpu_ids currently implemented
+    # todo tomorrow
+    
+    #jupyter setup
+    export XDG_RUNTIME_DIR="" # this avoids runfile erros
+    jupyter notebook --no-browser --ip=*
+
+%setup
+
+    # Runs from outside the container during Bootstrap
+
+%post
+    # Runs within the container during Bootstrap
+    # Do some installation:
+    apt-get update && \
+    apt-get install -y pkg-config libzmq3-dev build-essential python3-pip && \
+    apt-get install -y nano
+    pip3 install --upgrade pip
+    # Set up some required environment defaults
+    # setting correct path
+    pip3 install jupyter
+    
+%test
+    # Sanity check that the container is operating
+    
